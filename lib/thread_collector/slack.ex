@@ -1,6 +1,7 @@
 defmodule ThreadCollector.Slack do
   @slack_api_base_url "https://slack.com/api/"
   @conversations_history_api "conversations.history"
+  @post_message_api "chat.postMessage"
 
   def retrieve_channel_history(channel_id, limit \\ 10) do
     with {:ok, result} <-
@@ -19,5 +20,19 @@ defmodule ThreadCollector.Slack do
         |> Enum.map_join("\n", fn %{"text" => message} -> message end)
       }
     end
+  end
+
+  def post_message(channel_id, message) do
+    (@slack_api_base_url <> @post_message_api)
+    |> Mojito.post(
+      [
+        {"Authorization", "Bearer " <> System.get_env("SLACK_API_TOKEN")},
+        {"Content-Type", "application/json"}
+      ],
+      Jason.encode!(%{
+        "channel" => channel_id,
+        "text" => message
+      })
+    )
   end
 end

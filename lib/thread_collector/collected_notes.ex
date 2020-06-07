@@ -2,11 +2,6 @@ defmodule ThreadCollector.CollectedNotes do
   @collected_notes_api_base_url "https://collectednotes.com/"
 
   def create_note(note_body, note_title) do
-    IO.inspect(
-      @collected_notes_api_base_url <>
-        "sites/" <> System.get_env("COLLECTED_NOTES_SITE_ID") <> "/notes/"
-    )
-
     with {:ok, result} <-
            (@collected_notes_api_base_url <>
               "sites/" <> System.get_env("COLLECTED_NOTES_SITE_ID") <> "/notes/")

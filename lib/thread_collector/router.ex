@@ -29,7 +29,7 @@ defmodule ThreadCollector.Router do
     Task.start(fn ->
       with {:ok, messages} <- Slack.retrieve_channel_history(channel_id, limit),
            {:ok, note_url} <- CollectedNotes.create_note(messages, title) do
-        Logger.info("Success! Note URL: " <> note_url)
+        Slack.post_message(channel_id, "Note created at " <> note_url)
       end
     end)
 
